@@ -4,6 +4,22 @@
 
 ## Vue2
 
+组件间通信
+
+
+
+props
+
+
+
+全局事件总线
+
+
+
+自定义事件
+
+
+
 
 
 ## Vue3
@@ -66,3 +82,20 @@ let person = reactive({
     },{deep: true})
 ```
 
+* watchEffect
+
+```js
+watchEffect(() => {
+    // 这个方法里面所使用到的data被改变时，就会被调用
+    const x1 = name
+    csl("被调用了")
+})
+```
+
+* 祖孙间数据通信
+
+  ```
+  provie 
+  ```
+
+  
