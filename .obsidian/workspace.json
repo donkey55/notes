@@ -1,0 +1,153 @@
+{
+  "main": {
+    "id": "7f6f72aefe3ed7b2",
+    "type": "split",
+    "children": [
+      {
+        "id": "e159af20810e4d1d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6c83551a51f9df7d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "nodes/README.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2414d5f96fa96697",
+    "type": "split",
+    "children": [
+      {
+        "id": "c257463160506e15",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c0525a2d15b73676",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "8907e35dbcead8d6",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "8bd5c9546237c418",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 254.5
+  },
+  "right": {
+    "id": "883e11a82c731f84",
+    "type": "split",
+    "children": [
+      {
+        "id": "955cb75d0afcf7b5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fa6ae079f3a53c64",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "nodes/README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "902dd9d89bcc41eb",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "nodes/README.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "88575d385ad0a1d3",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "87a705ac3322ebb1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "nodes/README.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "6c83551a51f9df7d",
+  "lastOpenFiles": [
+    "nodes/未命名.md",
+    "nodes/README.md",
+    "nodes/vue.md",
+    "nodes/block_chain.md",
+    "nodes/专业课.pdf",
+    "nodes/专业课.md",
+    "nodes/政治.md",
+    "nodes/数学.md",
+    "nodes/面经.pdf",
+    "life.md"
+  ]
+}
