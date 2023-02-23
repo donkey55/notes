@@ -1,8 +1,6 @@
 # Table of contents
 
-* [java](README.md)
-* [我](life.md)
-* [notes](nodes/README.md)
+* [notes](README.md)
   * [Spring boot](<nodes/Spring boot.md>)
   * [block\_chain](nodes/block\_chain.md)
   * [todo](nodes/todo.md)

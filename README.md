@@ -1,1 +1,1 @@
-[[life]] qqqqqqq
+# notes
