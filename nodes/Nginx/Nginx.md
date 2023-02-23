@@ -147,3 +147,42 @@ upstream httpds {
 本质进行路径（location）转发，将访问静态资源（css,js,html）的路径全部放到nginx路径下
 
 可以使用正则进行location路径进行匹配
+
+## Nginx URLRewrite
+
+```nginx
+location / {
+    rewrite ^/2.html$  /index.jsp?pageNum=2  break;
+    proxy_pass http://baidu.com;
+}
+```
+
+```bash
+rewrite <regex>   <replacement>   [flag];
+
+flag:
+last # 本条规则匹配完成后，继续向下匹配新的location URI规则
+break # 本条规则匹配完成即终止，不再匹配后面的任何规则
+redirect # 返回302临时重定向，浏览器地址会显示跳转后的URL地址
+permanent # 返回301永久重定向，浏览器地址栏会显示跳转后的URL地址
+```
+
+## nginx防盗链
+
+只允许图片在自己站点被看到，不允许其他站点引用。
+
+使用浏览器二次请求资源自动添加referer属性来让限制图片的外部引用。 
+
+```nginx
+location / {
+	valid_referers [none] lsp.lsp123,top;
+    if ($invalid_referer) {
+        return 403;
+    }
+}
+# 添加none后，请求若没有refer时可以直接访问
+ 
+```
+
+
+
