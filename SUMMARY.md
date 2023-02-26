@@ -15,7 +15,7 @@
     * [Nginx](nodes/Nginx/Nginx.md)
     * [nginx自建机场原理](nodes/Nginx/airport-nginx.md)
   * [Rust](nodes/Rust/README.md)
-      * [Rust闭包类型](nodes/Rust/Rust播闭包类型.md)
+      * [Rust闭包类型](nodes/Rust/Rust闭包类型.md)
       * [Rust生命周期](nodes/Rust/Rust生命周期.md)
 * [shell](shell/README.md)
   * [Useful 命令](shell/Useful 命令.md)
