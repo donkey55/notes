@@ -13,6 +13,7 @@
   * [面经](nodes/面经.md)
   * [Nginx](nodes/nginx/README.md)
     * [Nginx](nodes/Nginx/Nginx.md)
-    * [nginx自建机场原理](nodes/nginx/nginx-zi-jian-ji-chang-yuan-li.md)
+    * [nginx自建机场原理](nodes/nginx/airport-nginx.md)
+  * [Rust](nodes/Rust/README.md)
 * [有用的脚本](you-yong-de-jiao-ben/README.md)
   * [Useful 命令](<有用的脚本/Useful 命令.md>)
