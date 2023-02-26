@@ -3,7 +3,6 @@
 * [notes](README.md)
   * [Spring boot](<nodes/Spring boot.md>)
   * [block\_chain](nodes/block\_chain.md)
-  * [todo](nodes/todo.md)
   * [Vue笔记](nodes/vue.md)
   * [专业课](nodes/专业课.md)
   * [政治](nodes/政治.md)
