@@ -16,5 +16,7 @@
   * [Rust](nodes/Rust/README.md)
     * [Rust闭包类型](nodes/Rust/Rust闭包类型.md)
     * [Rust生命周期](nodes/Rust/Rust生命周期.md)
+    * [Rust智能指针](nodes/Rust/Rust智能指针.md)
+    * [Rust语法](nodes/Rust/语法.md)
 * [shell](shell/README.md)
   * [Useful 命令](<shell/Useful 命令.md>)
