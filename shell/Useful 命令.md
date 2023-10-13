@@ -84,7 +84,7 @@ speedtest
 ### airUniver
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/crossfw/Air-Universe-install/master/AirU.sh)
+wget https://raw.githubusercontent.com/crossfw/Air-Universe-install/master/AirU.sh && bash AirU.sh
 ```
 
 ### warp
@@ -97,3 +97,18 @@ wget -N https://raw.githubusercontent.com/fscarmen/warp/main/warp-go.sh && bash 
 # v6小鸡，选2，似乎选6会有问题
 
 ```
+
+### ssh-copy-id
+
+windows
+
+```bash
+type ~/.ssh/id_rsa.pub | ssh username@ipaddress "cat >> .ssh/authorized_keys" 
+```
+
+linux
+
+```bash
+ssh-copy-id -i root@yourip
+```
+
