@@ -112,3 +112,13 @@ linux
 ssh-copy-id -i root@yourip
 ```
 
+### Pip配置与代理
+
+单次配置代理
+
+```
+pip install package --proxy=127.0.0.1:7890
+```
+
+
+
