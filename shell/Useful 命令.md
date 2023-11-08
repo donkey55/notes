@@ -1,4 +1,6 @@
-## Useful 命令
+# Useful 命令
+
+## Linux
 
 ### acme证书申请
 
@@ -111,6 +113,150 @@ linux
 ```bash
 ssh-copy-id -i root@yourip
 ```
+
+## 环境
+
+### Pip配置镜像与代理
+
+单次配置代理
+
+```
+pip install package --proxy=127.0.0.1:7890
+```
+
+在C:\User\用户目录下，新建pip文件夹，然后在该文件夹下新建`pip.ini`文件。填写如下内容：
+
+```ini
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+proxy     = http://127.0.0.1:7890
+[install]
+trusted-host=pypi.tuna.tsinghua.edu.cn
+```
+
+如果是虚拟环境下，可以进行在`你的虚拟环境文件夹/pip.ini`中填入上面内容。
+
+如果是linux系统，则应该为`pip.conf`
+
+### npm配置镜像与代理
+
+#### 命令配置
+
+查看当前npm的配置
+
+```shell
+npm config list
+```
+
+配置镜像源（这里是淘宝镜像源）
+
+```shell
+npm config set registry https://registry.npm.taobao.org/
+```
+
+配置代理
+
+7890对应端口
+
+```shell
+npm config set proxy http://127.0.0.1:7890
+```
+
+清除配置
+
+```shell
+npm config delete proxy
+```
+
+#### 配置文件配置
+
+linux npm全局配置文件一般在一般存储在`~/.npmrc`
+
+windows的全局配置文件一般存储在`C:\User\username\.npmrc`
+
+配置内容如下示例：
+
+```shell
+registry=https://registry.npm.taobao.org/
+proxy=http://127.0.0.1:7890
+```
+
+
+
+
+
+
+
+## 环境
+
+### Pip配置镜像与代理
+
+单次配置代理
+
+```
+pip install package --proxy=127.0.0.1:7890
+```
+
+在C:\User\用户目录下，新建pip文件夹，然后在该文件夹下新建`pip.ini`文件。填写如下内容：
+
+```ini
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+proxy     = http://127.0.0.1:7890
+[install]
+trusted-host=pypi.tuna.tsinghua.edu.cn
+```
+
+如果是虚拟环境下，可以进行在`你的虚拟环境文件夹/pip.ini`中填入上面内容。
+
+如果是linux系统，则应该为`pip.conf`
+
+### npm配置镜像与代理
+
+#### 命令配置
+
+查看当前npm的配置
+
+```shell
+npm config list
+```
+
+配置镜像源（这里是淘宝镜像源）
+
+```shell
+npm config set registry https://registry.npm.taobao.org/
+```
+
+配置代理
+
+7890对应端口
+
+```shell
+npm config set proxy http://127.0.0.1:7890
+```
+
+清除配置
+
+```shell
+npm config delete proxy
+```
+
+#### 配置文件配置
+
+linux npm全局配置文件一般在一般存储在`~/.npmrc`
+
+windows的全局配置文件一般存储在`C:\User\username\.npmrc`
+
+配置内容如下示例：
+
+```shell
+registry=https://registry.npm.taobao.org/
+proxy=http://127.0.0.1:7890
+```
+
+
+
+
 
 ### ssh密钥生成
 
