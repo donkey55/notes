@@ -112,3 +112,8 @@ linux
 ssh-copy-id -i root@yourip
 ```
 
+### ssh密钥生成
+
+```shell
+ssh-keygen -t rsa
+```
