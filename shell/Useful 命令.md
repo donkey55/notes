@@ -56,11 +56,12 @@ lsp ALL=(ALL) NOPASSWD: ALL
 
 ```
 
+
+
 ### 脚本1
 
 ```bash
 wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh
-
 
 ```
 ### 脚本2
@@ -72,7 +73,13 @@ bash <(curl -s -L https://git.io/v2ray.sh)
 ### 流媒体解锁
 
 ```bash
-bash <(curl -L -s https://raw.githubusercontent.com/lmc999/RegionRestrictionCheck/main/check.sh)
+bash <(curl -L -s check.unlock.media)
+```
+
+### 三网回程测试
+
+```shell
+curl https://raw.githubusercontent.com/zhanghanyun/backtrace/main/install.sh -sSf | sh
 ```
 
 ### speedtest测速
