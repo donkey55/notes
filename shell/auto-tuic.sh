@@ -21,7 +21,7 @@ function install_and_run () {
     curl --fail -O https://raw.githubusercontent.com/donkey55/notes/master/shell/tuic-config.json
     echo "正在生成tuic 配置文件...."
     jq \
-      ".inbounds[0].listen_port=\"${port}\" | \
+      ".inbounds[0].listen_port=${port} | \
       .inbounds[0].tls.server_name=\"${domain}\" | \
       .inbounds[0].tls.acme.domain=\"${domain}\" | \
       .inbounds[0].tls.acme.email=\"${email}\" | \
@@ -65,6 +65,7 @@ function edit_config() {
   vim /etc/sing-box/config.json 
 }
 function gen_shadowrocket_config() {
+  echo "gen_shadowrocket_config"
   port=`jq ".inbounds[0].listen_port" ${CONFIG_FILE}`
   uuid=`jq ".inbounds[0].users[0].uuid" ${CONFIG_FILE}`
   password=`jq ".inbounds[0].users[0].password" ${CONFIG_FILE}`
@@ -81,7 +82,6 @@ function gen_shadowrocket_config() {
     \"password\": "${password}",
     \"user\": "${uuid}",
   }"
-  echo "gen_shadowrocket_config"
 }
 
 function gen_tuic_client_config() {
@@ -89,13 +89,12 @@ function gen_tuic_client_config() {
   uuid=`jq ".inbounds[0].users[0].uuid" ${CONFIG_FILE}`
   password=`jq ".inbounds[0].users[0].password" ${CONFIG_FILE}`
   host=`jq -r ".inbounds[0].tls.acme.domain" ${CONFIG_FILE}`
-  ip=$(ip addr | awk '/^[0-9]+: / {}; /inet.*global/ {print gensub(/(.*)\/(.*)/, "\\1", "g", $2)}' | head -n 1)
+  #ip=$(ip addr | awk '/^[0-9]+: / {}; /inet.*global/ {print gensub(/(.*)\/(.*)/, "\\1", "g", $2)}' | head -n 1)
   echo "{
     \"relay\": {
       \"server\": \"${host}:${port}\",
       \"uuid\": "${uuid}",
       \"password\": "${uuid}",
-      \"ip\": \"${ip}\",
       \"congestion_control\": \"bbr\",
       \"alpn\": [\"h3\"]
     },
