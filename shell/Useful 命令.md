@@ -204,3 +204,16 @@ proxy=http://127.0.0.1:7890
 ```shell
 ssh-keygen -t rsa
 ```
+
+### git
+
+有些时候gitignore不生效，主要原因是gitignore只能够忽略尚未track的文件，对于已经track的文件不太行，这里可以采用以下办法进行处理
+
+```shell
+#首先删除本地缓存
+git rm -r --cached .
+# 重新加入文件
+git add .
+git commit -m "更新gitigonre"
+```
+
