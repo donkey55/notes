@@ -99,7 +99,7 @@ wget https://raw.githubusercontent.com/crossfw/Air-Universe-install/master/AirU.
 ### Tuic
 
 ```shell
-wget https://raw.githubusercontent.com/donkey55/notes/master/shell/auto-tuic.sh && bash auto-tuic.sh
+wget https://raw.githubusercontent.com/koopkl/auto-tuic/main/auto-tuic.sh && bash auto-tuic.sh
 ```
 
 
