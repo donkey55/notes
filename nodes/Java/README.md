@@ -1,4 +1,6 @@
-## NetSDP
+# README 
+
+要学这么多呀~
 
 * Mysql
 * Redis
