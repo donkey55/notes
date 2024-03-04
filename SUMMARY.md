@@ -30,6 +30,7 @@
     * [视图和存储过程和触发器](nodes/MySQL/视图和存储过程和触发器.md)
     * [MySQL锁](nodes/MySQL/锁.md)
     * [InnoDB引擎](nodes/MySQL/InnoDB引擎.md)
+    * [MySQL运维](nodes/MySQL/MySQL运维.md)
   * [Java](nodes/Java/README.md)
     * [常用知识](nodes/Java/常用知识.md)
     * [Java序列化](nodes/Java/Java序列化.md)
