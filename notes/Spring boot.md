@@ -120,7 +120,46 @@ AOP工作流程
 
 ![image-20240310173815564](https://s2.loli.net/2024/03/10/kJD3liVLOuyYzsg.png)
 
+### Aop切入点表达式
 
+标准格式：动作关键词（访问修饰符 返回值 包名.类/接口名.方法（参数）异常名）
+
+其中可以使用通配符
+
+* `*` ，单个独立的任意符号，可以独立出现，也可以 作为前准或者后缀的匹配符出现
+* `..`多个连续的任意符号，常用于简化包名与参数的书写
+* `+`，专用于匹配子类类型
+
+### Aop通知类型
+
+* @Before
+* @After
+* @Around
+  * 需要增加一个参数(ProceedingJoinPoint ) 并在合适的位置调用，来作为原始操作的前后的分割点
+    * `ProceedingJoinPoint`包含了切入点方法的信息，包括参数、名字、返回值等等，这里就可以对方法调用前进行一些校验、检查以及参数替换等等，还要方法调用结束后的一些处理
+
+### Spring 事务
+
+* `@Transactional` 来开启事务，修饰方法，表示该方法是一个事务
+
+* 创建事务管理器bean，返回类型为 `PlatformTransactionManager`
+
+* 配置Spring 开启事务 `@EnableTransactionManagement`
+
+#### Spring事务角色
+
+* 事务管理员：发起事务方，在Spring中通常指代业务层开启事务的方法
+* 事务协调员：加入事务方，在spring中通常指代数据层方法，也可以是业务层方法
+
+#### Spring事务属性
+
+* readOnly 设置事务是否为只读
+* timeout，设置事务超时时间
+* rollbackFor，设置事务回滚异常（xxx.class），即遇到了某种异常便会回滚，因为有些异常不会被回滚，所以想要其回滚，那么需要加入进去
+* rollbackForClassName,设置事务回滚异常（String）
+* noRollbackFor,设置事务不回滚异常（xxx.class）
+* noRollbackForClassName，设置事务不回滚异常（String）
+* propagation，设置事务传播行为。即设置事务协调员针对事务管理员所携带的事务，应该采取的操作（加入 or 不加入等）
 
 ## Spring boot
 
