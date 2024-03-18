@@ -1,7 +1,167 @@
 ## Maven
 
-- mvn compile
--  
+多模块开发和设计
+
+一个模块引用另外一个模块，只需要导入坐标即可。
+
+### 依赖传递
+
+路径优先：当依赖中出现相同的资源时，层级越深，优先级越低，层级越浅，优先级越高
+
+声明优先：当资源在相同层级被依赖时，配置顺序靠前的覆盖配置顺序靠后的
+
+特殊优先：当同级配置了相同资源的不同版本，后配置的覆盖先配置的
+
+### 可选依赖
+
+隐藏本模块所引用的模块，即不想本模块所依赖的资源被别的模块在引用时覆盖和冲突
+
+在dependency使用 `<optional>true</optional>` 。隐藏当前模块中的某个依赖，使其不具备传递性。即别人引用本模块时，看不到本模块依赖了某个依赖
+
+### 排除依赖
+
+```xml
+<exclusions>
+    <exclusion>
+    	<groupId></groupId>
+        <artifactId></artifactId>
+    </exclusion>
+</exclusions>
+```
+
+
+
+### 模块聚合
+
+父亲模块管理多个子模块。
+
+首先配置父模块的打包方式
+
+然后配置父模块所管理的子模块
+
+```xml
+<packaging>pom</packaging>
+// 子模块
+<modules>
+    // 子模块的路径，这里是相对路径，针对pom文件所在的路径
+    <module>ooo</module>
+</modules>
+```
+
+> 注：每个maven都有对应的打包方式，默认为jar，wab工程打包方式为war
+
+聚合模块进行构建时，其中每一个模块都会进行构建
+
+### 模块继承
+
+子工程可以继承使用父工程中的配置信息。
+
+> 聚合和继承通常是一起使用的。
+
+配置继承，在子工程中进行配置。
+```xml
+<parent>
+	<groupId></groupId>
+    <artifactId></artifactId>
+    <version></version>
+    // 相对路径，配置继承的哪个位置，可选
+    <relativePath>../parent/pom.xml</relativePath>
+</parent>
+```
+
+### 依赖管理
+
+在父工程中配置
+
+```xml
+<dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+```
+
+那么子工程中，同样配置此依赖，但是并不需要配置版本，此时会使用父亲的版本，但是如果子类不配置junit这个配置，子类便不会有此依赖。
+
+```xml
+ <dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+> 依赖管理的作用为：父工程的一些依赖，一些子工程需要，一些子工程不需要，由此可以将其配置在`dependencyManagement`，然后再需要其中所管理的依赖的子工程中配置即可。
+
+**继承、聚合和依赖管理三个部分，能够减少Spring工程中子模块之间的版本冲突，同时简化开发和配置**
+
+### 属性
+
+```xml
+<properties>
+    <spring.version>5.2.1</spring.version>
+</properties>
+ <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>sping-jdbc</artifactId>
+    <scope>${spring.version}</scope>
+</dependency>
+```
+
+如上面的属性配置，`spring.version`便为我们定义的一个变量，接下来可以使用`${}`的方式来使用
+
+### 版本管理
+
+* 工程版本
+  * snapshot（快照版本）
+    * 项目开发过程中临时输出的版本，称为快照版本
+    * 快照版本会随着开发的进展不断更新
+  * release（发布版本）
+    * 项目开发到进入阶段里程碑后，向团队外部发布较为稳定的版本，这种版本所对应的构建文件是稳定的，即便进行功能的后续开发，也不会改变当前发布版本内容，这种版本称为发布版本。
+* 发布版本
+  * alpha版
+  * beta版
+  * 纯数字版
+
+### 跳过测试
+
+```xml
+<build>
+        <finalName>server</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+```
+
+上面是跳过全部测试，可以设置为false，然后配置`excludes` or `includes`
+
+### 私有服务器
+
+* maven中配置对私服的访问权限和私服地址
+* 项目中配置上传上传的私服中的仓库和地址
+
+```xml
+<distributionManagement>
+        <repository>
+            <id></id>
+            <url></url>
+        </repository>
+    </distributionManagement>
+```
+
+`id`为仓库名，`url`为仓库地址，然后执行`mvn deploy`会将工程的依赖存储在仓库中
 
 # Spring
 
@@ -161,15 +321,204 @@ AOP工作流程
 * noRollbackForClassName，设置事务不回滚异常（String）
 * propagation，设置事务传播行为。即设置事务协调员针对事务管理员所携带的事务，应该采取的操作（加入 or 不加入等）
 
+## SpringMVC
+
+这里我们想要创建一个MVC的服务，可以分为以下几个部分：
+
+* 创建controller对应的类，实现对一个请求路径的响应
+
+* 创建Spring MVC配置类，扫描controlller的bean所在包，即将该controller能够被加载到Spring的容器中
+
+* 定义一个servlet容器启动的配置类，继承于 `AbstractDispatcherServletInitializer`,实现部对应的方法，如下：
+
+  ```java
+  public class ServletConfig extends AbstractDispatcherServletInitializer {
+      @Override
+      protected WebApplicationContext createServletApplicationContext() {
+          AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+          // 这里即为第二步所配置的Spring的配置类
+          ctx.register(SpringMVCConfig.class);
+          return ctx;
+      }
+  
+      @Override
+      protected String[] getServletMappings() {
+          // 配置哪些请求被容器给管理，这里是全部的都给Spring MVC
+          return new String[]{"/"};
+      }
+  
+      @Override
+      protected WebApplicationContext createRootApplicationContext() {
+          return null;
+      }
+  }
+  ```
+
+* 配置tomcat容器的maven插件然后maven运行tomcat
+
+![image-20240317222818135](https://s2.loli.net/2024/03/17/9mKWYOjzLpoGqkP.png)
+
+> 注：这里的SpringMVC的bean和前面的Spring的bean，如service层的bean，两者是由不同的context管理的，此时如果我们想要Spring的其他容器不加载MVC的bean，应该精确控制bean的扫描范围来抛除这些controller的bean
+
+注解
+
+`@Controller`
+
+`@RequestMapping`
+
+`@ResponseBody` 设置当前控制器方法响应内容为当前函数的返回值，无需解析
+
+### 请求参数传递
+
+#### get和post
+
+>  **注，这里的传递参数都是使用x-www-form-urlencoded来进行传参**,即请求参数中的**Content-Type: application/x-www-form-urlencoded**
+
+-  普通参数可以直接写入到controller参数内，如`name`参数，则可以使用`String name`，只要名称对应到即可。很简单，对于post请求也是一样，请求体内的字段是什么，方法参数名称写什么即可，如果二者不一致，则方法拿不到对应的值，会为null
+
+- 使用`@RequestParam("xxx")` 来指定前端传参的名字，这样就可以让方法参数和请求参数不同。
+
+- 方法参数可以为一个类，如 `User user`,如下为传参示例和嵌套传参形式
+
+  ```java
+  请求体参数：
+  {
+      "name": "xxx",
+      "age": 123，
+      "address.code": "123";
+  }
+  
+  // 方法声明
+  public String save(User user) {
+      
+  }
+  public class User {
+      class Address{
+          String code;
+      }
+      String name;
+      String age;
+  }
+  ```
+
+- 传递数组，如`List<String> likes`，`String[] likes`,注意这里如果是List形式，需要使用 `@RequestParam List<String> likes`
+
+  ```json
+  // 传参形式
+  {
+      "likes": "game",
+      "likes": "ooo",
+      "likes": "sss"
+  }
+  ```
+
+  其实就是Spring帮忙创建对象，然后使用set方法，set到对象中。
+
+> **如果想要使用body中发送json请求数据(即Content-Type：application/json)，需要手动开启一个配置 `@EnableWebMvc`，使用`@RequestBody`来注解controller中的方法的参数，这样就可以从body里面将json请求数据转换为我们需要的对象。**
+
+#### 日期类型传输
+
+日期型参数 
+
+```java
+public String dataParam(Date date) {
+    
+}
+// 请求使用路径参数
+http://url/date?date=2008/08/08 √
+http://url/date?date=2008-08-08 ×
+```
+
+针对不同的形式的字符串参数，需要配置一定的格式
+
+```java
+public String dataParam(@DateTimeFormat(pattern="YYYY-MM-DD") Date date) {
+}
+http://url/date?date=2008-08-08 √
+```
+
+##### 原理：
+
+使用`Converter`接口，很多类实现了这个接口，来帮忙实现数据格式转换
+
+### 响应
+
+返回数据，使用 `@ResponseBody` 返回数据，然后会使用jackon来进行转换为json。
+
+这个注解设置当前控制器的返回值作为响应体
+
+##### 原理：
+
+使用`HttpMessageConverter`接口
+
+### 异常处理
+
+使用AOP方式
+
+```Java
+@RestControllerAdvice
+public class ExceptionAdvice {
+    @ExceptionHandler(Exception.class) 
+    public Result doException(Exception ex) {
+        return new Result(500, "sbsbsbsb");
+    }
+}
+```
+
+类似上述方式，可以针对多种异常进行处理
+
+### 拦截器
+
+`intercepter` 配置主要分为两步：
+
+第一步是实现具体拦截时的操作，这里需要一个实现了`HandlerInterceptor`的接口的bean，然后在其中重写方法
+
+```java
+@Component
+public class AuthHandlerInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
+    }
+}
+```
+
+第二步，配置和注册拦截器的拦截配置类，这里需要实现 `WebMvcConfigurer` 接口
+
+```java
+@Configuration
+public class AuthWebMvcConfigurer implements WebMvcConfigurer {
+
+    @Autowired
+    AuthHandlerInterceptor authHandlerInterceptor;
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authHandlerInterceptor)
+                .addPathPatterns("/**");
+    }
+}
+```
+
+> **注：这个 `WebMvcConfigurer`接口中除了此拦截器之外，还有其他的功能，如资源路径映射等**
+
+#### 拦截器参数
+
+上面preHandle的函数中的handler对象
+
+#### 拦截器顺序
+
+可以配置多个拦截器，按照配置的顺序执行。
+
+因为拦截器中包含着 `preHandle` `postHandle` `afterCompletion`,所以会有多个拦截器的执行顺序的问题
+
 ## Spring boot
 
-## 简介
+### 简介
 
 **约定大于配置**
 
 内嵌Tomcat等服务器
 
-## 启动流程
+### 启动流程
 
 1. 加载Spring Boot配置文件：SpringBoot会先加载内部的spring-boot-autoconfiguration 和 spring-boot-starter等Starter，然后加载用户自定义的配置文件，并将其中的配置项加载到Spring环境中
 2. 自动配置IOC容器：SpringBoot根据应用程序所引入的依赖和上下文的配置，自动配置Spring IOC容器。它会自动扫描所有带有@Component以及派生注解的bean，并添加相应的依赖关系，从而构建出整个应用程序的bean容器
@@ -178,3 +527,128 @@ AOP工作流程
 5. 运行CommandLineRunner和ApplicationRunner：如果应用程序中有实现了COmmandLineRunner或者ApplicationRunner接口的bean，SpringBoot会在容器启动完成后自动调用他们的run()方法
 6. 注册ServletCOntextListener：Spring Boot会自动注册SpringBootServletInitializer，ServletContextListener和Filter等，以保证程序正常运行。
 
+### 基础配置
+
+三种配置形式
+
+* `.properties` 
+* `.yml` (**主流**)
+* `.yaml` 
+
+加载顺序：
+
+`.properties` > `.yml` > `.yaml`
+
+#### 四级配置文件
+
+1. file: copnfig/application.yml （**这里的file是jar包所在的文件夹**）【最高】
+
+2. file: application.yml  （**这里的file是jar包所在的文件夹**）
+3. classpath: config/application.yml    **项目工程中的classpath，即resources目录下**
+4. classpath: application.yml 【最低】 **项目工程中的classpath，即resources目录下**
+
+1与2，留作系统打包后设置通用属性
+
+3与4 用于系统开发阶段设置通用属性
+
+#### yaml语法规则
+
+- 大小写敏感
+- 属性层级关系使用多行描述，每行结尾使用冒号结束
+- 使用缩进表示层级关系，同层级左侧对其，只允许使用空格 （不可以使用tab）
+- 属性值前面要加空格
+- \# 表示冒号 
+
+#### yaml数据读取方式
+
+- `@Value`的方式
+
+- 依赖注入 `Environment` ，可以拿到配置的所有内容
+
+- 定义实体类
+
+  - ```java
+    @Component
+    @ConfigurationProperties(prefix = "user.xx.xx")
+    public class User() {
+        
+    }
+    ```
+
+    然后依赖注入即可
+
+#### 多环境开发
+
+命令行启动，类似如下形式可以在启动的时候指定一些参数，覆盖jar包中的属性
+
+```shell
+java -jar springboot.jar --spring.profiles.active=dev
+
+java -jar springboot.jar --server.port=9999
+```
+
+## MyBatisPlus
+
+### 分页
+
+* 添加配置类，增加`IPage`插件的支持
+* 使用`IPage`即可
+
+### 条件查询
+
+```java
+LambdaQueryWrapper<UserEntity> lqw = new LambdaQueryWrapper<>();
+lqw.ge(UserEntity::getName, "a").or().eq(UserEntity::getName, "b");
+```
+
+### 表与实体类的映射
+
+* `@TableField(value="xxx", select=false)`，其中value表示数据库中的字段名，select为false表示不参与查询。
+* `@TableName("tb_user")` 实体类和数据库表名的映射
+
+### id生成
+
+`@TableId(type=IdTYpe.xxx)` 有多种
+
+* 自增 `AUTO`
+* 雪花id `ASSIGN_ID`
+* uuid `ASSIGN_UUID`
+* 手动指定 `INPUT`
+
+[](https://lsp-1259035619.cos.ap-beijing.myqcloud.com/typora/image-20240319011455131.png)
+
+
+
+![image-20240319011819882](https://s2.loli.net/2024/03/19/fFHcEQdN2awRgtG.png)
+
+### 逻辑删除
+
+实体类属性注解
+
+`@TableLogin(value="", delval="")`
+
+value 代表未删除的状态的值，delval代表删除状态的值。
+
+这样在删除的时候不会删除数据，而是进行数据状态修改
+
+也可以在配置文件中，进行全局配置。
+
+```yml
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: delete
+      logic-delete-value: "0"
+      logic-not-delete-value: "1"
+```
+
+### 乐观锁
+
+`@Version`
+
+* 字段上加上version字段
+* 增加拦截器 `OptimisticLockerInnerInterceptor`
+
+原理类似CAS操作
+
+即查询的时候拿到version，然后在修改的查询条件中增加一个条件，去查看当前的version是不是我拿到的这个version（CAS的期望值），如果是则可以修改，否则不能修改
