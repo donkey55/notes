@@ -33,7 +33,7 @@ innodb flush log at trx commit: 日志刷新到磁盘时机，取值：
 
 ## 磁盘结构
 
-![image-20240304163418474](https://s2.loli.net/2024/03/04/uFCyoQ1S58zw6xm.png)
+![image-20240319171205367](https://s2.loli.net/2024/03/19/Bg6ryKfiRktVbvF.png)
 
 ### System tablespace
 
@@ -45,7 +45,17 @@ innodb flush log at trx commit: 日志刷新到磁盘时机，取值：
 
 ### General Tablespaces
 
-通用表空间，需要通过create tablespace 语法创建通用表空间，在创建表时，可以指定该表空间
+通用表空间，默认没有这个存储区域，需要通过create tablespace 语法创建通用表空间，在创建表时，可以指定该表空间
+
+```mysql
+create tablespace ts_1 add datafile 'xxx.ibd' engine = innodb
+
+create table ooo(id int primary key auto_increment, name varchar(10)) engine=innodb tablespace ts_1; 
+```
+
+### Temporary Tablespaces
+
+InnoDB使用会话临时表空间和全局临时表空间，存储用户创建的临时表等数据
 
 ### Undo Tablespaces
 
