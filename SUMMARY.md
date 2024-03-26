@@ -1,6 +1,6 @@
 # Table of contents
 
-* [notes](README.md)
+* [notes](notes/README.md)
   * [Spring boot](<notes/Spring boot.md>)
   * [block\_chain](notes/block\_chain.md)
   * [Vue笔记](notes/vue.md)
