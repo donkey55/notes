@@ -325,9 +325,9 @@ public class ThreadLocalDemo {
 
 可以分为四类
 
-### Java线程池
+## Java线程池
 
-#### Executor框架
+### Executor框架
 
 > Executor 框架是一个根据一组执行策略调用，调度，执行和控制的异步任务的框架，目的是提供一种将”任务提交”与”任务如何运行”分离开来的机制。
 
@@ -370,4 +370,8 @@ Executors其中包含很多方法来创建各种线程池和对象
 ![线程池状态转换图](https://raw.githubusercontent.com/dunwu/images/master/cs/java/javacore/concurrent/java-thread-pool_2.png)
 
 尽量不要使用无界限任务队列，在高负载情况下容易出现爆内存，`Executors`中很多方法都默认采用无界任务队列。
+
+### `ThreadPoolExecutors` 解析
+
+#### 核心参数
 
