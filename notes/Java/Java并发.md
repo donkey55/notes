@@ -371,6 +371,13 @@ Executors其中包含很多方法来创建各种线程池和对象
 
 尽量不要使用无界限任务队列，在高负载情况下容易出现爆内存，`Executors`中很多方法都默认采用无界任务队列。
 
+尽量不要使用Executors自带的方法创建线程池：
+
+- CachedThreadPool，最大线程数是无界的
+- FixedThreadPool，阻塞队列是无界的
+- SingleThreadPool，阻塞队列是无界的
+- ScheduledThreadPool，最大线程数是无界的
+
 ### `ThreadPoolExecutors` 解析
 
 #### 核心参数
