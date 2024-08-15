@@ -622,6 +622,14 @@ public class AuthWebMvcConfigurer implements WebMvcConfigurer {
 
 因为拦截器中包含着 `preHandle` `postHandle` `afterCompletion`,所以会有多个拦截器的执行顺序的问题
 
+## Spring中的设计模式
+
+工厂模式
+
+单例模式
+
+
+
 ## Spring boot
 
 ### 简介

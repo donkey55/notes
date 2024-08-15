@@ -323,7 +323,7 @@ public class ThreadLocalDemo {
 
 原子变量类 **比锁的粒度更细，更轻量级**，并且对于在多处理器系统上实现高性能的并发代码来说是非常关键的。原子变量将发生竞争的范围缩小到单个变量上。
 
-可以分为四类
+
 
 ## Java线程池
 
@@ -381,4 +381,131 @@ Executors其中包含很多方法来创建各种线程池和对象
 ### `ThreadPoolExecutors` 解析
 
 #### 核心参数
+
+
+
+## JUC
+
+JUC的其实是java的一个包，`java.util.concurrent`，主要是Java并发的支持
+
+整体结构如下：
+
+1. 最底层的为unsafe的包的支持，提供了一系列的native方法，其中包括了很多方法，比如操作内存，操作指针，线程调度、内存屏障等等操作，这些方法是juc底层的支持
+
+2. JUC的很多并发操作底层都是CAS操作，CAS全称Compare and Set，是一种乐观锁，CAS操作本身是依赖于底层的unsafe提供的原子函数来实现。
+
+3. 原子类，这部分是Java提供的一系列支持原子操作的类，底层实现主要依赖CAS操作和volatile关键字，包括很多：
+
+- 原子基本类型
+  - AtomicInteger
+  - AtomicBoolean
+  - AtomicLong
+- 原子更新数组
+  - AtomicIntegerArray
+  - AtomicLongArray
+  - AtomicReferenceArray
+- 原子更新引用类型：
+  - AtomicReference
+  - AtomicStampedReference
+  - AtomicMarkableReferce
+- 原子更新字段类：基于反射，原子更新字段的值，这些Updater都是抽象类，在使用时需要先利用静态方法newUpdater()创建一个更新器
+  - AtomicIntegerFieldUpdater
+  - AtomicLongFieldUpdated
+  - AtomicReferenceFieldUpdater
+
+12种原子类主要作用就是为了能够支持原子操作。
+
+前三层的关系为：
+
+**原子类的CAS操作底层实现是使用Unsafe包的方法实现的。**即原子类的某个函数名字是CAS类型的操作，然后底层调用Unsafe包里面的函数。
+
+锁：
+
+1. LockSupport
+
+LockSupport提供了park和unpark操作来支持AQS，park即阻塞，unpark即释放，即提供了类似加锁和释放锁的操作。
+
+2. 锁核心类AQS
+
+AQS利用Unsafe（提供的CAS操作）和 LockSupport（提供Park和unpark操作）来实现的。
+
+3. 锁
+
+### JUC集合
+
+#### Unsafe、CAS、原子类
+
+这三者的关系可用以下来定义：
+
+**原子类的CAS操作底层实现是使用Unsafe包的方法实现的。**
+
+
+
+#### 锁
+
+##### LockSupport
+
+LockSupport从名字就可以看出，这是一个Lock的support类，他主要提供了两个操作：
+
+- LockSupport.park()
+- LockSUpport.unpark()
+
+park操作是
+
+##### AQS
+
+##### 各种锁
+
+###### ConcurrentReadWriteLock 
+
+###### CopyWriteArrayList
+
+CopyWriteArrayList是ArrayList的一个线程安全的变体，其中所有可变操作（add set）等都是通过对底层数组进行一次新的拷贝来实现的，是Copy On Write的体现
+
+在Java的Collection集合类中存在一个fail-fast错误机制。在使用迭代器遍历一个集合对象时，如果遍历过程中对集合对象的结构进行了修改（增加、删除），则会抛出`Concurrent Modification Exception`。如下：
+
+```java
+public static void main(String[] args) {
+        ArrayList<Integer> res = new ArrayList<>();
+        res.add(456);
+        Iterator<Integer> iterator = res.iterator();
+        while (iterator.hasNext()) {
+            res.add(123);
+            System.out.println(iterator.next());
+        }
+    }
+```
+
+这里便会抛出此异常。
+
+在`CopyWriteArrayList`中，实现了fail-safe机制，即不会抛出`Concurrent Modification Exception`。CopyWriteArrayList的COWIterator的内部类是通过创建一个本地数组元素的快照，这种快照风格的迭代器方法在创建迭代器时使用了对当时数组的引用。**这是一个弱一致性，即类似一个快照，我们在某个时间点创建了一个COWIterator，那么我们在访问这个iterator时，得到的是这个List在创建时间点的元素状态，并不会被后续的状态所影响**，所以也就不会抛出上面所说的CME异常。同时这个迭代器上也不允许对迭代器的**remove、set和add**，这些方法会抛出`UnsupportOperationException`
+
+在类的实现上，使用了一个可重入锁or仅仅使用一个final Object对象作为 `synchronized`关键字锁住代码段的形式来实现互斥访问。
+
+上面所说类使用数组的拷贝形式来实现对数组的增加、修改、删除等操作。具体来说，这里使用add，来说明流程：
+
+- 获取锁（多线程安全访问），获取当前Object数组，获取数组的长度
+- 根据数组长度复制一个新的长度为length + 1的Object数组
+- 设置最后一个元素为我们要添加的元素，释放锁，结束操作
+
+同理，remove方法是复制到一个长度减一的数组上，set虽然只是修改，但仍然是复制到新的数组上，然后对对应的位置修改赋值。
+
+**缺陷**
+
+- 写操作都需要进行拷贝数组，会需要内存，如果数组内容较多，可能导致young gc or full gc
+- 不能用于实时读的场景，拷贝数组、新增元素都需要时间，所以调用一个set操作后，读取的数据可能还是旧的，虽然能够做到最终一致性，但是无法满足实时性要求
+
+**使用场景**
+
+适合读多写少的场景，否则，每次操作都进行copy数组，这是一个相当大的代价
+
+#### 为什么CopyOnWriteArrayList性能会比Vector好？
+
+Vector对单独的add，remove等方法都是在方法上加了synchronized; 并且如果一个线程A调用size时，另一个线程B 执行了remove，然后size的值就不是最新的，然后线程A调用remove就会越界(这时就需要再加一个Synchronized)。这样就导致有了双重锁，效率大大降低，何必呢。于是vector废弃了，要用就用CopyOnWriteArrayList
+
+#### ConcurrentLinkedQueue 
+
+
+
+
 
