@@ -10,6 +10,7 @@
   * [未命名](notes/未命名.md)
   * [键帽](notes/键帽.md)
   * [面经](notes/面经.md)
+  * [llm](notes/llm.md)
   * [Nginx](readme/nginx/README.md)
     * [Nginx](notes/Nginx/Nginx.md)
     * [nginx自建机场原理](notes/Nginx/airport-nginx.md)
